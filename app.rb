@@ -22,6 +22,14 @@ configure do
   end
 end
 
+configure do
+
+  Dir["./lib/**/*.rb"].each do |file|
+    require file
+  end
+
+end
+
 get '/' do
   "hello world"
 end
