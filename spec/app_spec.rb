@@ -7,7 +7,7 @@ describe "My info-bazooka" do
   end
 
   it "should return job id for petition worker" do
-    post '/petitions', message: "ping"
+    post '/petitions/gobierno-federal', message: "ping"
     job_id = PingWorker.jobs.last['jid']
     job_status = Sidekiq::Status::status(job_id)
     response = { :job => job_id, :status => job_status }

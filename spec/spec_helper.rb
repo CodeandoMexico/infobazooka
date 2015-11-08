@@ -1,5 +1,8 @@
+require 'bundler'
+Bundler.setup
+
 require 'rack/test'
-require 'rspec'
+
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 

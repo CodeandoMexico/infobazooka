@@ -14,28 +14,36 @@ configure do
 
   Sidekiq.configure_server do |config|
     config.server_middleware do |chain|
-      chain.add Sidekiq::Status::ServerMiddleware, expiration: 30.minutes # default
+      chain.add Sidekiq::Status::ServerMiddleware, expiration: 30*60 # default
     end
     config.client_middleware do |chain|
       chain.add Sidekiq::Status::ClientMiddleware
     end
   end
-end
-
-configure do
 
   Dir["./lib/**/*.rb"].each do |file|
     require file
   end
-
 end
 
 get '/' do
   "hello world"
 end
 
-post '/petitions' do
-  job_id = PingWorker.perform_async(params[:message])
+post '/petitions/:agency' do |agency|
+  job_id = PingWorker.perform_async({
+    user: params[:message],
+    petition: params[:petition]})
   job_status = Sidekiq::Status::status(job_id)
   json job: job_id, status: job_status
+end
+
+get '/agencies' do
+  json Bazooka::Adapter.registered.map {|id, adapter|
+    [id, adapter.full_name]
+  }.to_h
+end
+
+get '/agencies/:agency' do |agency|
+  json Bazooka::Adapter.registered[agency].dependencies
 end

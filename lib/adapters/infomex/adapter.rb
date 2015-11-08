@@ -1,17 +1,19 @@
 Bazooka::Adapter.register('gobierno-federal') do
   # iXR/eRVCRK6pwXAePQ4VZ7(%
   self.load_config! File.dirname(__FILE__)+'/config.yml'
+  self.full_name = 'Gobierno Federal'
 
   def initialize
     super
     @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
 
+
   def publish params
     page = @agent.get('https://www.infomex.org.mx/gobiernofederal/solicitudInformacion/nuevaSolicitud.action')
     form = page.form('frmRecInformacion')
 
-    form.cboTipoSolicitud = '0',#@@config[:kinds][params[:petition][:type]]
+    form.cboTipoSolicitud = self.class.config('kinds')[params[:petition][:type]]
     form.field_with(name: 'solicitud.UsDes').value = params[:petition][:text]
     form.field_with(name: 'solicitud.UsDat').value = params[:petition][:extra] if params[:petition][:extra]
     form.field_with(name: 'cboDependencia').value = params[:petition][:dependency]
@@ -24,11 +26,18 @@ Bazooka::Adapter.register('gobierno-federal') do
     form.field_with(name: 'solicitud.usApemat').value = user[:last_name].last
     form.field_with(name: 'solicitud.usCalle').value = 'Avenida Siempreviva'
     form.field_with(name: 'solicitud.usNumext').value = '42'
-    form.field_with(name: 'cboPais').value = '189'
+    form.field_with(name: 'cboPais').value = '189' # Tuvalú
 
     result = @agent.submit(form, form.buttons_with(id: 'aceptar').first)
-    puts result.inspect
+    link = result.parser.at_css('.MAESTRO_TDETIQUETA a')
+    return link.attr('onclick').scan(%r{(\d+)/(\d+)}).flatten.join
   end
+
+
+  def register
+
+  end
+
 
   def auth (credentials)
     res = HTTParty.post 'https://www.infomex.org.mx/gobiernofederal/loginInfomexSolictiante.action', body: {
@@ -42,8 +51,7 @@ Bazooka::Adapter.register('gobierno-federal') do
       cookie = Mechanize::Cookie.new domain: '.infomex.org.mx', name: 'JSESSIONID', value: ssid, path: '/gobiernofederal/'
       @agent.cookie_jar.add cookie
     else
-      puts res.body
-      raise 'invalido'
+      raise 'Credenciales inválidas'
     end
   end
 end

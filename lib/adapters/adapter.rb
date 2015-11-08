@@ -1,3 +1,6 @@
+require 'mechanize'
+require 'httparty'
+
 module Bazooka
 
   module Adapter
@@ -6,7 +9,7 @@ module Bazooka
 
     def self.register nombre, &block;
       @@registered[nombre] = Class.new(AdapterMethods) do
-        self.name = nombre
+        self.id = nombre
         self.class_eval(&block)
       end
     end
@@ -17,44 +20,47 @@ module Bazooka
 
 
     def self.registered
-      @@registered.map {|adapter|
-        [adapter.name, adapter.dependencies]
-      }
+      @@registered
     end
 
 
     class AdapterMethods
       @@config = {}
 
+      # Crea un crawler nuevo
       def initialize
-        @agent = Mechanize.new
+        @agent = ::Mechanize.new
       end
 
+      class << self
+        def id= id
+          @@id = id
+        end
 
-      def self.name= name
-        @@name = name
-      end
+        def id
+          self.class_variable_get("@@id")
+        end
 
-      def self.base= base
-        @@base = base
-      end
+        def full_name= name
+          @@name = name
+        end
 
-      def name
-        @@name
-      end
+        def full_name
+          self.class_variable_get("@@name")
+        end
 
+        # Regresa los sujetos obligados
+        def dependencies
+          self.config('dependencies')
+        end
 
-      def dependencies
-        @@config['dependencies']
-      end
+        def load_config! file
+          self.class_variable_set '@@config', YAML.load(File.read(file))
+        end
 
-
-      def self.load_config! file
-        self.class_variable_set '@@config', YAML.load(File.read(file))
-      end
-
-      def self.config key
-        self.class_variable_get "@@#{key}"
+        def config key
+          self.class_variable_get("@@config")[key]
+        end
       end
     end
   end
