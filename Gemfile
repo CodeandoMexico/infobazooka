@@ -13,3 +13,8 @@ group :test do
   gem 'rspec', '~> 3.2'
   gem 'rake'
 end
+
+group :test, :sinatra do
+  gem 'httparty'
+  gem 'mechanize'
+end

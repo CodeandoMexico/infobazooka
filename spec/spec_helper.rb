@@ -1,7 +1,8 @@
+require 'bundler'
+Bundler.require :test
 require 'rack/test'
 require 'rspec'
 require 'sidekiq/testing'
-require 'mechanize'
 Sidekiq::Testing.fake!
 
 require File.expand_path '../../app.rb', __FILE__

@@ -13,7 +13,7 @@ Bazooka::Adapter.register('gobierno-federal') do
     page = @agent.get('https://www.infomex.org.mx/gobiernofederal/solicitudInformacion/nuevaSolicitud.action')
     form = page.form('frmRecInformacion')
 
-    form.cboTipoSolicitud = self.config(:kinds)[params[:petition][:type]]
+    form.cboTipoSolicitud = self.class.config('kinds')[params[:petition][:type]]
     form.field_with(name: 'solicitud.UsDes').value = params[:petition][:text]
     form.field_with(name: 'solicitud.UsDat').value = params[:petition][:extra] if params[:petition][:extra]
     form.field_with(name: 'cboDependencia').value = params[:petition][:dependency]
@@ -29,7 +29,8 @@ Bazooka::Adapter.register('gobierno-federal') do
     form.field_with(name: 'cboPais').value = '189' # Tuvalú
 
     result = @agent.submit(form, form.buttons_with(id: 'aceptar').first)
-    puts result.content
+    link = result.at_css('.MAESTRO_TDETIQUETA a')
+    return link.attr('onclick').scan(%r{(\d+)/(\d+)}).flatten.join
   end
 
 
