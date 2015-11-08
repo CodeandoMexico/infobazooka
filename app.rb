@@ -2,6 +2,8 @@ require 'sinatra'
 require 'sinatra/json'
 require 'sidekiq'
 require 'sidekiq-status'
+require 'mongo'
+require 'json/ext'
 
 require File.expand_path '../workers/ping_worker.rb', __FILE__
 
@@ -25,6 +27,10 @@ configure do
     end
   end
 
+  mongo_url = ENV['MONGOLAB_URI'] || 'mongodb://127.0.0.1:27017/bazooka'
+  client = Mongo::Client.new(mongo_url)
+  set :mongo_db, client[:petitions]
+
   require "./lib/adapters/adapter"
   Dir["./lib/adapters/*/*.rb"].each do |file|
     require file
@@ -40,7 +46,20 @@ post '/petitions/:agency' do |agency|
     user: params[:message],
     petition: params[:petition]})
   job_status = Sidekiq::Status::status(job_id)
+
+  params[:petition] = {} if params[:petition].nil?
+
+  settings.mongo_db.insert_one({
+    job: job_id,
+    status: job_status,
+    text: params[:petition][:text]
+  })
+
   json job: job_id, status: job_status
+end
+
+get '/petitions' do
+  json settings.mongo_db.find.each.to_a
 end
 
 get '/petitions/:job_id' do |job_id|

@@ -7,6 +7,8 @@ gem 'sidekiq'
 gem 'sidekiq-status'
 gem 'httparty'
 gem 'mechanize'
+gem 'mongo', '~> 2.1'
+gem 'bson_ext'
 
 group :test do
   gem 'rspec', '~> 3.2'
