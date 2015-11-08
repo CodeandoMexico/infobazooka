@@ -13,6 +13,7 @@
 ## How to run
 
 ```bash
+% cp env.example .env
 % foreman start
 ```
 
