@@ -4,65 +4,36 @@ require 'httparty'
 module Bazooka
 
   module Adapter
+    # Un adaptador se encarga de la comunicación entre este API y
+    # una institución de acceso a la información.
 
+    # Los adaptadores que se han registrado para ser utilizados
+    # @private
     @@registered = {}
 
-    def self.register nombre, &block;
-      @@registered[nombre] = Class.new(AdapterMethods) do
+    # Registra un adaptador bajo un slug
+    #
+    # @param  nombre [String] El slug de un adaptador, i.e. `gobierno-federal`
+    # @yield [GenericAdapter] Una clase anónima que extiende GenericAdapter
+    def self.register nombre, &block
+      @@registered[nombre] = Class.new(GenericAdapter) do
         self.id = nombre
         self.class_eval(&block)
       end
     end
 
+    # Obtiene uno de los adaptadores registrados
+    #
+    # @param  nombre [String] El slug del adaptador
+    # @return [GenericAdapter]
     def self.fetch nombre
       return @@registered[nombre].new
     end
 
-
+    # Obtiene todos los adaptadores registrados
+    # @return [Array]
     def self.registered
       @@registered
     end
-
-
-    class AdapterMethods
-      @@config = {}
-
-      # Crea un crawler nuevo
-      def initialize
-        @agent = ::Mechanize.new
-      end
-
-      class << self
-        def id= id
-          @@id = id
-        end
-
-        def id
-          self.class_variable_get("@@id")
-        end
-
-        def full_name= name
-          @@name = name
-        end
-
-        def full_name
-          self.class_variable_get("@@name")
-        end
-
-        # Regresa los sujetos obligados
-        def dependencies
-          self.config('dependencies')
-        end
-
-        def load_config! file
-          self.class_variable_set '@@config', YAML.load(File.read(file))
-        end
-
-        def config key
-          self.class_variable_get("@@config")[key]
-        end
-      end
-    end
   end
-
 end

@@ -1,5 +1,5 @@
 Bazooka::Adapter.register('gobierno-federal') do
-  # iXR/eRVCRK6pwXAePQ4VZ7(%
+
   self.load_config! File.dirname(__FILE__)+'/config.yml'
   self.full_name = 'Gobierno Federal'
 
@@ -7,7 +7,6 @@ Bazooka::Adapter.register('gobierno-federal') do
     super
     @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end
-
 
   def publish params
     page = @agent.get('https://www.infomex.org.mx/gobiernofederal/solicitudInformacion/nuevaSolicitud.action')
@@ -33,19 +32,18 @@ Bazooka::Adapter.register('gobierno-federal') do
     return link.attr('onclick').scan(%r{(\d+)/(\d+)}).flatten.join
   end
 
-
-  def register
-
-  end
-
-
-  def auth (credentials)
-    res = HTTParty.post 'https://www.infomex.org.mx/gobiernofederal/loginInfomexSolictiante.action', body: {
+  def auth credentials
+    body = {
       login: credentials[:username],
       password: credentials[:password]
-    }, verify: false
+    }
+    endpoint = 'https://www.infomex.org.mx/gobiernofederal/loginInfomexSolictiante.action'
 
-    body = res.body
+    res = HTTParty.post(endpoint, {
+      body: body,
+      verify: false
+    })
+
     if res.body =~ /Solicitante:/
       ssid = res.headers['Set-Cookie'].split(';').first.split('=').last
       cookie = Mechanize::Cookie.new domain: '.infomex.org.mx', name: 'JSESSIONID', value: ssid, path: '/gobiernofederal/'
@@ -55,4 +53,3 @@ Bazooka::Adapter.register('gobierno-federal') do
     end
   end
 end
-
