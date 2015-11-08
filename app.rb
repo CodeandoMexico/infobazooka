@@ -30,8 +30,10 @@ get '/' do
   "hello world"
 end
 
-post '/petitions' do
-  job_id = PingWorker.perform_async(params[:message])
+post '/petitions/:agency' do |agency|
+  job_id = PingWorker.perform_async({
+    user: params[:message],
+    petition: params[:petition]})
   job_status = Sidekiq::Status::status(job_id)
   json job: job_id, status: job_status
 end
