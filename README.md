@@ -7,6 +7,12 @@
 ## How to test
 
 ```bash
-% rspec spec/app_spec.rb
+% rake
+```
+
+## How to run
+
+```bash
+% foreman start
 ```
 
