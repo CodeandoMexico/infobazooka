@@ -43,6 +43,11 @@ post '/petitions/:agency' do |agency|
   json job: job_id, status: job_status
 end
 
+get '/petitions/:job_id' do |job_id|
+  job_status = Sidekiq::Status::status(job_id)
+  json job: job_id, status: job_status
+end
+
 get '/agencies' do
   json Bazooka::Adapter.registered.map {|id, adapter|
     [id, adapter.full_name]
