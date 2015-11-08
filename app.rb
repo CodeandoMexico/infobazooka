@@ -21,7 +21,8 @@ configure do
     end
   end
 
-  Dir["./lib/**/*.rb"].each do |file|
+  require "./lib/adapters/adapter"
+  Dir["./lib/adapters/*/*.rb"].each do |file|
     require file
   end
 end
