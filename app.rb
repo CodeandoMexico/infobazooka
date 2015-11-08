@@ -29,7 +29,7 @@ configure do
 
   mongo_url = ENV['MONGOLAB_URI'] || 'mongodb://127.0.0.1:27017/bazooka'
   client = Mongo::Client.new(mongo_url)
-  set :mongo_db, client[:bazooka]
+  set :mongo_db, client[:petitions]
 
   require "./lib/adapters/adapter"
   Dir["./lib/adapters/*/*.rb"].each do |file|
