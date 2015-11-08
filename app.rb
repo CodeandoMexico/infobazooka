@@ -58,6 +58,10 @@ post '/petitions/:agency' do |agency|
   json job: job_id, status: job_status
 end
 
+get '/petitions' do
+  settings.mongo_db.find
+end
+
 get '/petitions/:job_id' do |job_id|
   job_status = Sidekiq::Status::status(job_id)
   json job: job_id, status: job_status
