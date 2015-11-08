@@ -9,6 +9,7 @@ group :sinatra do
   gem 'sidekiq-status'
 end
 
-group :spec do
+group :test do
   gem 'rspec', '~> 3.2'
+  gem 'rake'
 end
