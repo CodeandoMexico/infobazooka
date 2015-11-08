@@ -2,6 +2,8 @@ require 'sinatra'
 require 'sinatra/json'
 require 'sidekiq'
 require 'sidekiq-status'
+require 'mongo'
+require 'json/ext'
 
 require File.expand_path '../workers/ping_worker.rb', __FILE__
 
@@ -24,6 +26,9 @@ configure do
       chain.add Sidekiq::Status::ClientMiddleware
     end
   end
+
+  db = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'test')
+  set :mongo_db, db[:test]
 
   require "./lib/adapters/adapter"
   Dir["./lib/adapters/*/*.rb"].each do |file|
