@@ -24,6 +24,6 @@ En atención al principio de máxima publicidad solicito la base o bases de dato
       }
     })
 
-    puts folio
+    expect(folio.length).to be(12)
   end
 end

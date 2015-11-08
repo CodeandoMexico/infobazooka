@@ -29,7 +29,7 @@ Bazooka::Adapter.register('gobierno-federal') do
     form.field_with(name: 'cboPais').value = '189' # Tuvalú
 
     result = @agent.submit(form, form.buttons_with(id: 'aceptar').first)
-    link = result.at_css('.MAESTRO_TDETIQUETA a')
+    link = result.parser.at_css('.MAESTRO_TDETIQUETA a')
     return link.attr('onclick').scan(%r{(\d+)/(\d+)}).flatten.join
   end
 
@@ -51,8 +51,7 @@ Bazooka::Adapter.register('gobierno-federal') do
       cookie = Mechanize::Cookie.new domain: '.infomex.org.mx', name: 'JSESSIONID', value: ssid, path: '/gobiernofederal/'
       @agent.cookie_jar.add cookie
     else
-      puts res.body
-      raise 'invalido'
+      raise 'Credenciales inválidas'
     end
   end
 end
