@@ -7,7 +7,7 @@ describe "Infomex" do
 
   it "should post an information request" do
     infomex = Bazooka::Adapter.fetch('gobierno-federal')
-    infomex.auth(username: 'infobazooka',  password: 'iXR/eRVCRK6pwXAePQ4VZ7(%')
+    infomex.auth(username: ENV['USER'],  password: ENV['PASS'])
     folio = infomex.publish({
       user: {
         name: 'Test',
