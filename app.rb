@@ -25,7 +25,7 @@ end
 configure do
 
   Dir["./lib/**/*.rb"].each do |file|
-    include file
+    require file
   end
 
 end

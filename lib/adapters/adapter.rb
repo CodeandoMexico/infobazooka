@@ -2,7 +2,7 @@ module Bazooka
 
   module Adapter
 
-    @@adapters = {}
+    @@registered = {}
 
     def self.register nombre, &block;
       @@registered[nombre] = Class.new(AdapterMethods) do

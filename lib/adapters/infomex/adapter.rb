@@ -1,6 +1,6 @@
 Bazooka::Adapter.register('gobierno-federal') do
   # iXR/eRVCRK6pwXAePQ4VZ7(%
-  self.load_config! './config.yml'
+  self.load_config! File.dirname(__FILE__)+'/config.yml'
 
   def initialize
     super
