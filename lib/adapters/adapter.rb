@@ -11,11 +11,8 @@ module Bazooka
       end
     end
 
-    def self.get nombre
-      cfg = @@adapters[nombre]
-      adapter = Adapter.new
-      adapter.instance_eval(cfg[:config]);
-      return adapter
+    def self.fetch nombre
+      return @@registered[nombre].new
     end
 
 
