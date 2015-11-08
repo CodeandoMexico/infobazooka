@@ -6,6 +6,7 @@ group :sinatra do
   gem 'sinatra-contrib'
   gem 'httparty'
   gem 'sidekiq'
+  gem 'sidekiq-status'
 end
 
 group :spec do
