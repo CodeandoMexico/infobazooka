@@ -20,14 +20,10 @@ configure do
       chain.add Sidekiq::Status::ClientMiddleware
     end
   end
-end
-
-configure do
 
   Dir["./lib/**/*.rb"].each do |file|
     require file
   end
-
 end
 
 get '/' do
@@ -38,4 +34,14 @@ post '/petitions' do
   job_id = PingWorker.perform_async(params[:message])
   job_status = Sidekiq::Status::status(job_id)
   json job: job_id, status: job_status
+end
+
+get '/agencies' do
+  json Bazooka::Adapter.registered.map {|id, adapter|
+    [id, adapter.full_name]
+  }.to_h
+end
+
+get '/agencies/:agency' do |agency|
+  json Bazooka::Adapter.registered[agency].dependencies
 end
