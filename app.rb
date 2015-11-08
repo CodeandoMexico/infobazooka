@@ -27,8 +27,9 @@ configure do
     end
   end
 
-  db = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'test')
-  set :mongo_db, db[:test]
+  mongo_url = ENV['MONGOLAB_URI'] || 'mongodb://127.0.0.1:27017/bazooka'
+  client = Mongo::Client.new(mongo_url)
+  set :mongo_db, client[:bazooka]
 
   require "./lib/adapters/adapter"
   Dir["./lib/adapters/*/*.rb"].each do |file|
