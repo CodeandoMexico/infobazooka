@@ -1,3 +1,6 @@
+require 'mechanize'
+require 'httparty'
+
 module Bazooka
 
   module Adapter

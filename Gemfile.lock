@@ -130,6 +130,7 @@ PLATFORMS
 DEPENDENCIES
   httparty
   mechanize
+  rack-test
   rake
   rspec (~> 3.2)
   sidekiq
