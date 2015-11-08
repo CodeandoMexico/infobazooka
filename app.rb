@@ -59,7 +59,7 @@ post '/petitions/:agency' do |agency|
 end
 
 get '/petitions' do
-  settings.mongo_db.find
+  json settings.mongo_db.find.each.to_a
 end
 
 get '/petitions/:job_id' do |job_id|
