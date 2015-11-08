@@ -46,6 +46,15 @@ post '/petitions/:agency' do |agency|
     user: params[:message],
     petition: params[:petition]})
   job_status = Sidekiq::Status::status(job_id)
+
+  params[:petition] = {} if params[:petition].nil?
+
+  settings.mongo_db.insert_one({
+    job: job_id,
+    status: job_status,
+    text: params[:petition][:text]
+  })
+
   json job: job_id, status: job_status
 end
 
