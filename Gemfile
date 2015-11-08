@@ -5,6 +5,7 @@ group :sinatra do
   gem 'sinatra', '~> 1.4', '>= 1.4.6'
   gem 'sinatra-contrib'
   gem 'httparty'
+  gem 'sidekiq'
 end
 
 group :spec do
