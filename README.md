@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rodowi/info-bazooka.svg?branch=master)](https://travis-ci.org/rodowi/info-bazooka)
+[![Build Status](https://travis-ci.org/CodeandoMexico/infobazooka.svg?branch=master)](https://travis-ci.org/CodeandoMexico/infobazooka)
 
 # info-bazooka
 
