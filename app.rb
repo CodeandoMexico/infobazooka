@@ -31,6 +31,7 @@ configure do
   client = Mongo::Client.new(mongo_url)
   set :mongo_db, client[:petitions]
 
+  require './lib/json_generator'
   require "./lib/adapters/adapter"
   Dir["./lib/adapters/*/*.rb"].each do |file|
     require file
