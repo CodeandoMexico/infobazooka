@@ -4,6 +4,10 @@
 
 ![nintendo bazooka](cover.png)
 
+## What the ...?
+
+More info -> https://github.com/CodeandoMexico/infobazooka/wiki
+
 ## How to test
 
 ```bash
