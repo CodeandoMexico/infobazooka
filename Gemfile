@@ -15,3 +15,8 @@ group :test do
   gem 'rake'
   gem 'rack-test'
 end
+
+group :infomex do
+  gem 'i18n'
+  gem 'nokogiri'
+end
