@@ -7,6 +7,7 @@ namespace :infomex do
     require 'bundler'
 
     Bundler.require :infomex
+    $app_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
   end
 
   desc "Actualiza la lista de sistemas Infomex Disponibles"
@@ -37,16 +38,17 @@ namespace :infomex do
       info = Nokogiri::HTML(open(source))
       url_link = info.at_css('#Header1_nav_ctl a.mayusculas')
 
+      endpoint = url_link.attr('href').gsub(/\/[\w]+\.\w{2,4}$/, '').gsub(/\/$/, '')
+
       sujetos[slug(nombre)] = {
         nombre: nombre,
         entidad: entidad,
-        endpoint: url_link.attr('href'),
-        dependencias: []
+        endpoint: endpoint,
+        dependencias: {}
       }
     end
 
-    app_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
-    path = app_path+'/data/sistemas.yaml'
+    path = $app_path+'/data/sistemas.yaml'
     File.open(path, 'w') { |io| io << YAML.dump(sujetos) }
     puts "#{sujetos.values.count} sistemas guardados en #{path}"
   end
