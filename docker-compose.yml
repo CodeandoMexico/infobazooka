@@ -1,0 +1,14 @@
+web:
+  build: .
+  command: foreman start
+  ports:
+   - "5000:5000"
+  volumes:
+   - .:/app
+  links:
+   - redis
+   - mongo
+redis:
+  image: redis
+mongo:
+  image: mongo
