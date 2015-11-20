@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 
 # Enviroment variables
 ENV \
-  RUBY_VERSION=2.1.5
+  RUBY_VERSION=2.1.5 \
   PATH=$HOME/.rbenv/bin:$PATH
 
 # Install Ruby and set the working version as default
