@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git-core \
+    libssl-dev \
+    libreadline-dev \
+    zlib1g-dev \
   && git clone https://github.com/sstephenson/rbenv.git ~/.rbenv \
   && git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build \
   && git clone https://github.com/sstephenson/rbenv-gem-rehash.git ~/.rbenv/plugins/rbenv-gem-rehash \
