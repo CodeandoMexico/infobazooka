@@ -19,10 +19,12 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-# Enviroment variables
-ENV \
-  RUBY_VERSION=2.1.5 \
-  PATH=$HOME/.rbenv/bin:$PATH
+ENV RUBY_VERSION=2.1.5
+
+# Add rbenv configuration to .bashrc
+RUN \
+  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc && \
+  echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 
 # Install Ruby and set the working version as default
 RUN \
