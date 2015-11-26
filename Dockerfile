@@ -31,7 +31,9 @@ RUN \
 
 # Install Ruby and set the working version as default
 RUN \
+  source ~/.bashrc && \
   rbenv install $RUBY_VERSION -k && \
+  rbenv rehash && \
   rbenv global $RUBY_VERSION
 
 # Working directory
