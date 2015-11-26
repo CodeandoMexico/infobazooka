@@ -9,7 +9,12 @@ require File.expand_path '../workers/ping_worker.rb', __FILE__
 
 configure do
   Sidekiq.configure_client do |config|
-    config.redis = { url: ENV["REDISTOGO_URL"] || "redis://localhost:6379/" }
+    config.redis = {
+      url:
+        ENV["REDISTOGO_URL"]      ||
+        ENV["REDIS_PORT"]         ||
+        "redis://localhost:6379/"
+    }
 
     config.client_middleware do |chain|
       chain.add Sidekiq::Status::ClientMiddleware
@@ -17,7 +22,12 @@ configure do
   end
 
   Sidekiq.configure_server do |config|
-    config.redis = { url: ENV["REDISTOGO_URL"] || "redis://localhost:6379/" }
+    config.redis = {
+      url:
+        ENV["REDISTOGO_URL"]      ||
+        ENV["REDIS_PORT"]         ||
+        "redis://localhost:6379/"
+    }
 
     config.server_middleware do |chain|
       chain.add Sidekiq::Status::ServerMiddleware, expiration: 30*60 # default
@@ -27,7 +37,10 @@ configure do
     end
   end
 
-  mongo_url = ENV['MONGOLAB_URI'] || 'mongodb://127.0.0.1:27017/bazooka'
+  mongo_url =
+    ENV['MONGOLAB_URI'] ||
+    ENV['MONGO_PORT']   ||
+    'mongodb://127.0.0.1:27017/bazooka'
   client = Mongo::Client.new(mongo_url)
   set :mongo_db, client[:petitions]
 
