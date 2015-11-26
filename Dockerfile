@@ -11,6 +11,7 @@ MAINTAINER Rodolfo Wilhelmy <@rodowi>
 
 RUN apt-get update && apt-get install -y \
     build-essential \
+    curl \
     git-core \
   && git clone https://github.com/sstephenson/rbenv.git ~/.rbenv \
   && git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build \
